@@ -10,6 +10,11 @@ import java.util.ArrayList;
 
 public class TextSearcher {
 
+	// initialize a HashMap
+	// Keys of hash are every unique word, values are an array of indexes representing the starting location of each occurrence of the word in textContent
+	HashMap<String, List<Integer>> hash = new HashMap<String, List<Integer>>();
+	String textContent;
+
 	/**
 	 * Initializes the text searcher with the contents of a text file.
 	 * The current implementation just reads the contents into a string
@@ -28,23 +33,16 @@ public class TextSearcher {
 			w.write(buf,0,readCount);
 		}
 
-		// initialize a HashMap on constructor
-		// Keys of hash are every unique word, values are an array of indexes representing the starting location of each occurrence of the word in textContent
-		// HashMap<String, int[]> hash = new HashMap<String, int[]>();
-		HashMap<String, List<Integer>> hash = new HashMap<String, List<Integer>>();
-
-		init(w.toString(), hash);
+		this.textContent = w.toString();
+		init(w.toString());
 	}
 
 	/**
 	 *  Initializes any internal data structures that are needed for
 	 *  this class to implement search efficiently.
 	 */
-	protected void init(String fileContents, HashMap<String, List<Integer>> hash) {
+	protected void init(String fileContents) {
 		// TODO -- fill in implementation
-		System.out.println("Hello, World.");
-		System.out.println(hash);
-		System.out.println(fileContents);
 
 		// regex to search for words
 		String regex = "([a-zA-Z0-9']+)";
@@ -53,23 +51,16 @@ public class TextSearcher {
 		// Iterate through file looking for words
 		// When you find a word, add it to the hash along with its starting index (if it's already in the hash, just push its starting index to the value array)
 		while (tokenizer.hasNext()) {
-			String nextMatch = tokenizer.next();
+			String nextMatch = tokenizer.next().toLowerCase();
 			if (tokenizer.isWord(nextMatch)) {
-				System.out.println("this is a word:");
-				System.out.println(nextMatch);
-				System.out.println("this is the index:");
-				System.out.println(tokenizer.getIndex());
 				if (hash.containsKey(nextMatch)) {
-					// hash.put(nextMatch, tokenizer.getIndex())
 					hash.get(nextMatch).add(tokenizer.getIndex());
 				} else {
-					// hash.put(nextMatch, new int[tokenizer.getIndex()]);
 					hash.put(nextMatch, new ArrayList<Integer>());
 					hash.get(nextMatch).add(tokenizer.getIndex());
 				}
 			}
 		}
-		System.out.println(hash);
 	}
 
 	/**
@@ -81,6 +72,8 @@ public class TextSearcher {
 	 */
 	public String[] search(String queryWord,int contextWords) {
 		// TODO -- fill in implementation
+		System.out.println(textContent);
+		System.out.println(hash);
 		return new String[0];
 	}
 }

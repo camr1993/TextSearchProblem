@@ -6,7 +6,7 @@ public class Main {
   public static void main(String[] args) throws IOException {
 		File file = new File("files/short_excerpt.txt");
 		TextSearcher searcher = new TextSearcher(file);
-		// String[] results = searcher.search("naturalists",3);
+		String[] results = searcher.search("naturalists",3);
   }
 }
 
