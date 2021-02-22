@@ -75,14 +75,10 @@ public class TextSearcher {
 	public String[] search(String queryWord,int contextWords) {
 		// TODO -- fill in implementation
 		String[] output = new String[0];
-		// System.out.println(textContent);
-		// System.out.println(hash);
-		// System.out.println(hash.get("naturalists"));
-		// List<Integer> array = hash.get("naturalists");
-		// System.out.println(array.size());
 
+		// basic idea is for each index saved in the hash, iterate indexes left and right until you get to the right amount of context words
 		if (hash.containsKey(queryWord.toLowerCase())) {
-			List<Integer> listOfIdx = hash.get(queryWord);
+			List<Integer> listOfIdx = hash.get(queryWord.toLowerCase());
 			output = new String[listOfIdx.size()];
 			for (int i = 0; i < listOfIdx.size(); i++) {
 				int index = listOfIdx.get(i);
@@ -117,22 +113,27 @@ class LeftIndex {
 	public int getLeftIndex() {
 		int wordCounter = 0;
 		String prevChar = "";
-		Pattern pattern = Pattern.compile("[\n\r\s]");
+		// Pattern pattern = Pattern.compile("[\n\r\s]");
+		Pattern pattern = Pattern.compile("[a-zA-Z0-9']");
 		while (index > 0 && wordCounter <= contextWords) {
 			Matcher matcherPrev = pattern.matcher(prevChar);
     	boolean matchFoundPrev = matcherPrev.find();
 			Matcher matcherCurr = pattern.matcher(textContent.substring(index, index + 1));
     	boolean matchFoundCurr = matcherCurr.find();
 
-			// iterating left and checking if the previous char was a letter and current char is white space (meaning we just ended going through a word)
-			if (matchFoundPrev == false && matchFoundCurr == true) {
+			// iterating left and checking if the previous char was a letter and current char is not a letter (meaning we just ended going through a word)
+			if (matchFoundPrev == true && matchFoundCurr == false) {
 				wordCounter++;
 			}
 
 			prevChar = textContent.substring(index, index + 1);
     	index--;
 		}
-		return index + 1;
+		if (index == 0) {
+			return index;
+		} else {
+			return index + 1;
+		}
 	}
 }
 
@@ -151,14 +152,15 @@ class RightIndex {
 	public int getRightIndex() {
 		int wordCounter = 0;
 		String prevChar = "";
-		Pattern pattern = Pattern.compile("[\n\r\s]");
+		// Pattern pattern = Pattern.compile("[\n\r\s]");
+		Pattern pattern = Pattern.compile("[a-zA-Z0-9']");
 		while (index < textContent.length() - 1 && wordCounter <= contextWords) {
 			Matcher matcherPrev = pattern.matcher(prevChar);
     	boolean matchFoundPrev = matcherPrev.find();
 			Matcher matcherCurr = pattern.matcher(textContent.substring(index, index + 1));
     	boolean matchFoundCurr = matcherCurr.find();
 
-			// iterating right and checking if the previous char was whitespace and current char is a letter (meaning we just ended going through a word)
+			// iterating right and checking if the previous char was letter and current char is a not a letter (meaning we just ended going through a word)
 			if (matchFoundPrev == true && matchFoundCurr == false) {
 				wordCounter++;
 			}

@@ -1,16 +1,36 @@
 package search;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 
 public class Main {
-  public static void main(String[] args) throws IOException {
-		File file = new File("files/short_excerpt.txt");
-		TextSearcher searcher = new TextSearcher(file);
-		String[] results = searcher.search("naturalists",3);
-    // String[] results = searcher.search("give",2);
-    // System.out.println(results);
-    System.out.println(Arrays.toString(results));
+  public static void main(String[] args) throws Exception {
+    TextSearcherTest tests = new TextSearcherTest();
+    tests.testOneHitNoContext();
+    System.out.println("Test 1 passed!");
+    tests.testMultipleHitsNoContext();
+    System.out.println("Test 2 passed!");
+    tests.testBasicSearch();
+    System.out.println("Test 3 passed!");
+    tests.testBasicMoreContext();
+    System.out.println("Test 4 passed!");
+    tests.testApostropheQuery();
+    System.out.println("Test 5 passed!");
+    tests.testNumericQuery();
+    System.out.println("Test 6 passed!");
+    tests.testMixedQuery();
+    System.out.println("Test 7 passed!");
+    tests.testCaseInsensitiveSearch();
+    System.out.println("Test 8 passed!");
+    tests.testNearBeginning();
+    System.out.println("Test 9 passed!");
+    tests.testNearEnd();
+    System.out.println("Test 10 passed!");
+    tests.testMultipleSearches();
+    System.out.println("Test 11 passed!");
+    tests.testOverlappingHits();
+    System.out.println("Test 12 passed!");
+    tests.testNoHits();
+    System.out.println("Test 13 passed!");
+    tests.testTokenizer();
+    System.out.println("Test 14 passed!");
   }
 }
 
