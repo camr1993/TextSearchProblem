@@ -7,6 +7,8 @@ import java.io.StringWriter;
 import java.util.HashMap; // import the HashMap class
 import java.util.List;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TextSearcher {
 
@@ -72,10 +74,102 @@ public class TextSearcher {
 	 */
 	public String[] search(String queryWord,int contextWords) {
 		// TODO -- fill in implementation
-		System.out.println(textContent);
-		System.out.println(hash);
-		return new String[0];
+		String[] output = new String[0];
+		// System.out.println(textContent);
+		// System.out.println(hash);
+		// System.out.println(hash.get("naturalists"));
+		// List<Integer> array = hash.get("naturalists");
+		// System.out.println(array.size());
+
+		if (hash.containsKey(queryWord.toLowerCase())) {
+			List<Integer> listOfIdx = hash.get(queryWord);
+			output = new String[listOfIdx.size()];
+			for (int i = 0; i < listOfIdx.size(); i++) {
+				int index = listOfIdx.get(i);
+				LeftIndex leftIndexInstance = new LeftIndex(index, contextWords, textContent);
+				int leftIdx = leftIndexInstance.getLeftIndex();
+				RightIndex rightIndexInstance = new RightIndex(index, contextWords, textContent);
+				int rightIdx = rightIndexInstance.getRightIndex();
+				output[i] = textContent.substring(leftIdx, rightIdx).trim();
+			}
+		} else {
+			output = new String[0];
+		}
+
+		return output;
 	}
 }
 
 // Any needed utility classes can just go in this file
+
+// get the left index of the context words
+class LeftIndex {
+  int index;
+	int contextWords;
+	String textContent;
+
+	public LeftIndex(int index, int contextWords, String textContent) {
+		this.index = index;
+		this.contextWords = contextWords;
+		this.textContent = textContent;
+	}
+
+	public int getLeftIndex() {
+		int wordCounter = 0;
+		String prevChar = "";
+		Pattern pattern = Pattern.compile("[\n\r\s]");
+		while (index > 0 && wordCounter <= contextWords) {
+			Matcher matcherPrev = pattern.matcher(prevChar);
+    	boolean matchFoundPrev = matcherPrev.find();
+			Matcher matcherCurr = pattern.matcher(textContent.substring(index, index + 1));
+    	boolean matchFoundCurr = matcherCurr.find();
+
+			// iterating left and checking if the previous char was a letter and current char is white space (meaning we just ended going through a word)
+			if (matchFoundPrev == false && matchFoundCurr == true) {
+				wordCounter++;
+			}
+
+			prevChar = textContent.substring(index, index + 1);
+    	index--;
+		}
+		return index + 1;
+	}
+}
+
+// get the left index of the context words
+class RightIndex {
+  int index;
+	int contextWords;
+	String textContent;
+
+	public RightIndex(int index, int contextWords, String textContent) {
+		this.index = index;
+		this.contextWords = contextWords;
+		this.textContent = textContent;
+	}
+
+	public int getRightIndex() {
+		int wordCounter = 0;
+		String prevChar = "";
+		Pattern pattern = Pattern.compile("[\n\r\s]");
+		while (index < textContent.length() - 1 && wordCounter <= contextWords) {
+			Matcher matcherPrev = pattern.matcher(prevChar);
+    	boolean matchFoundPrev = matcherPrev.find();
+			Matcher matcherCurr = pattern.matcher(textContent.substring(index, index + 1));
+    	boolean matchFoundCurr = matcherCurr.find();
+
+			// iterating right and checking if the previous char was whitespace and current char is a letter (meaning we just ended going through a word)
+			if (matchFoundPrev == true && matchFoundCurr == false) {
+				wordCounter++;
+			}
+
+			prevChar = textContent.substring(index, index + 1);
+    	index++;
+		}
+		if (index == textContent.length() - 1) {
+			return index + 1;
+		} else {
+			return index - 1;
+		}
+	}
+}

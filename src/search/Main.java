@@ -1,20 +1,24 @@
 package search;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Main {
   public static void main(String[] args) throws IOException {
 		File file = new File("files/short_excerpt.txt");
 		TextSearcher searcher = new TextSearcher(file);
 		String[] results = searcher.search("naturalists",3);
+    // String[] results = searcher.search("give",2);
+    // System.out.println(results);
+    System.out.println(Arrays.toString(results));
   }
 }
 
 
+
 /*
 
-Hi! My main language is JavaScript, and I actually had to learn Java in order to do this problem. I just wanted to include my JavaScript solution as well since this is what I'm most comfortable coding in
-
+Hi! My main language is JavaScript, and I actually had to learn Java in order to do this problem. I just wanted to include my JavaScript solution as well since this is what I'm most comfortable coding in:
 
 
 const fs = require('fs')
