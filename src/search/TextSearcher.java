@@ -113,7 +113,6 @@ class LeftIndex {
 	public int getLeftIndex() {
 		int wordCounter = 0;
 		String prevChar = "";
-		// Pattern pattern = Pattern.compile("[\n\r\s]");
 		Pattern pattern = Pattern.compile("[a-zA-Z0-9']");
 		while (index > 0 && wordCounter <= contextWords) {
 			Matcher matcherPrev = pattern.matcher(prevChar);
@@ -152,7 +151,6 @@ class RightIndex {
 	public int getRightIndex() {
 		int wordCounter = 0;
 		String prevChar = "";
-		// Pattern pattern = Pattern.compile("[\n\r\s]");
 		Pattern pattern = Pattern.compile("[a-zA-Z0-9']");
 		while (index < textContent.length() - 1 && wordCounter <= contextWords) {
 			Matcher matcherPrev = pattern.matcher(prevChar);
